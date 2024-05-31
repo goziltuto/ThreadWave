@@ -67,5 +67,3 @@ services:
       - db
     ports:
       - 4040:80
-    volumes:
-      - ./phpmyadmin/sessions:/sessions
