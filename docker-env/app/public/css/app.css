@@ -1,0 +1,202 @@
+.header-logo {
+    width: 150px;
+    /* 必要に応じて幅を調整 */
+    height: auto;
+    /* 高さを自動調整 */
+    clip-path: inset(50px 0 50px 0);
+    /* 上下を10px削る */
+}
+
+.image-container {
+    margin: -50px;
+    /* 親要素を余白分詰める */
+    clip-path: inset(50px 0 50px 0);
+    /* 上下を10px削る */
+}
+
+.logo {
+    width: 300px;
+    height: auto;
+    margin-right: auto;
+    margin-left: auto;
+    /* 左右のマージンを自動で設定して中央に配置 */
+    margin-bottom: -50px;
+    clip-path: inset(50px 0 50px 0);
+    /* 上下を10px削る */
+}
+
+/* リセット用 */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* 通常CSS */
+header {
+    background-color: cyan;
+    text-align: center;
+}
+
+main {
+    padding: 0 20px;
+}
+
+#darkmodeBtn {
+    background-color: gray;
+    color: white;
+    width: 150px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+#darkmodeBtn:hover {
+    opacity: 0.7;
+}
+
+/* ダークモードCSS */
+.dark {
+    background-color: #333333;
+    color: rgb(255, 255, 255);
+}
+
+.dark header {
+    background-color: midnightblue;
+}
+
+/* Bootstrapカラーを変更 */
+.dark .card-header {
+    background-color: #222222;
+    border-color: #ffffff;
+    /* 枠線の色を白に設定 */
+}
+
+.dark #darkmodeBtn {
+    background-color: silver;
+    color: black;
+}
+
+.dark .card-body {
+    background-color: #333333;
+
+}
+
+.dark .form-control {
+    background-color: #333333;
+    color: rgb(255, 255, 255);
+}
+
+.dark .list-group-item {
+    background-color: #333333;
+    border-color: #ffffff;
+    /* 枠内のテキストカラー変更 */
+    color: rgb(255, 255, 255);
+}
+
+.dark .navbar {
+    background-color: #444444 !important;
+}
+
+.dark th {
+    background-color: #333333;
+    color: rgb(255, 255, 255);
+}
+
+/* テーブルに適用するスタイル */
+body.dark .table {
+    color: #ffffff;
+}
+
+body.dark .table thead th {
+    color: #ffffff;
+}
+
+body.dark .table tbody td {
+    color: #ffffff;
+}
+
+.dark .active {
+    background-color: #222222 !important;
+    color: #aaaaaa !important;
+}
+
+
+
+/* トグルボタンの基本スタイル */
+.toggle-button {
+    display: inline-block;
+    position: relative;
+    width: 50px;
+    height: 25px;
+    border-radius: 50px;
+    border: 3px solid #dddddd;
+    box-sizing: content-box;
+    cursor: pointer;
+    transition: border-color .4s;
+}
+
+.toggle-button:has(:checked) {
+    border-color: #00a6ff;
+}
+
+.toggle-button::after {
+    position: absolute;
+    top: 50%;
+    left: 2.5px;
+    transform: translateY(-50%);
+    width: 22.5px;
+    height: 22.5px;
+    border-radius: 50%;
+    background-color: #dddddd;
+    content: '';
+    transition: left .4s;
+}
+
+.toggle-button:has(:checked)::after {
+    left: 25px;
+    background-color: #00a6ff;
+}
+
+.toggle-button input {
+    display: none;
+}
+
+span {
+    white-space: pre-wrap;
+}
+
+
+/* Google Fonts 読み込み */
+@import url("https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap");
+
+/* 時計の共通スタイル */
+.clock {
+    font-family: 'Share Tech Mono', monospace;
+    color: #00d0ff;
+    text-shadow: 0 0 20px #0512ff;
+    line-height: 1.2;
+    text-align: center;
+}
+
+/* 日付のスタイル */
+.clock-date {
+    font-size: 15px;
+    margin: 0;
+}
+
+/* 時間のスタイル */
+.clock-time {
+    font-size: 35px;
+    margin: 0;
+}
+
+/* 文字サイズ調整 */
+@media screen and (max-width: 5px) {
+    .clock-date {
+        font-size: 5vw;
+    }
+
+    .clock-time {
+        font-size: 20vw;
+    }
+}

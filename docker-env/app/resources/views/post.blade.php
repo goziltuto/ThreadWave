@@ -1,48 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2ch風掲示板</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container">
-        <h1 class="text-center">2ch風掲示板(ThreadWave)</h1>
-            <div class="row">
-                <div class="col-md-8 offset-md-2">
-                    <div class="card">
-                        <div class="card-header">
-                            投稿フォーム
-                        </div>
-                        <div class="card-body">
-                            <form class="form-inline">
-                                <div class="form-group mr-2">
-                                    <label for="name" class="sr-only">投稿タイトル</label>
-                                    <input type="text" class="form-control col-md-20" id="name" placeholder="投稿タイトルを入力">
-                                </div>
-                                <button type="submit" class="btn btn-primary">投稿する</button>
-                            </form>
-                        </div>
-                    </div>
+@extends('layouts.layout')
+@section('content')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<!-- 投稿タイトル -->
+<h1 class="text-center">
+    <span class="txt-rotate" data-period="2000" data-rotate='[ "{{ $post->title }}" ]'></span>
+</h1>
+
+<div class="container">
+    <div class="row mt-3">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    コメント一覧
                 </div>
-            </div>
-        <div class="row mt-3">
-            <div class="col-md-8 offset-md-2">
-                <div class="card">
-                    <div class="card-header">
-                        投稿一覧
-                    </div>
-                    <div class="card-body">
-                        <ul class="list-group">
-                            @foreach($posts as $post)
-                            <li class="list-group-item">名前: {{ $post['name'] }}<br>メッセージ: {{ $post['title'] }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        @foreach($comments as $comment)
+                        <li class="list-group-item">
+                            <div id="display-comment-{{ $comment->id }}">
+                                @php
+                                $nameColor = 'text-success'; // デフォルトの色
+                                if ($comment->user->id == 0) {
+                                $nameColor = 'text-danger'; // 管理者は赤色
+                                } elseif ($comment->user_id == $post->user_id) {
+                                $nameColor = 'text-primary'; // 投稿者は青色
+                                }
+                                @endphp
+
+                                <strong class="{{ $nameColor }}">{{ $loop->iteration }}. 名前: {{ $comment->user->name }} </strong>{{ $comment->created_at->format('Y/m/d') }}({{ $comment->created_at->isoFormat('ddd') }}) {{ $comment->created_at->format('H:i:s') }} ID: {{ $comment->user_id }}
+                                <br><span class="comment-text {{ $comment->deleted_at ? 'text-secondary' : '' }}">{{ $comment->deleted_at ? 'このコメントは削除されました' : $comment->comment }}</span>
+                                <br>
+                                @if ($comment->isOwner)
+                                <div class="btn-group" role="group" aria-label="Basic example">
+                                    @if (is_null($comment->deleted_at))
+                                    <a href="#" class="btn btn-link edit-comment" data-id="{{ $comment->id }}">編集</a>
+                                    <a href="#" class="btn btn-link delete-comment text-danger" data-id="{{ $comment->id }}">削除</a>
+                                    @endif
+                                </div>
+                                @endif
+                            </div>
+                            <div id="edit-comment-form-{{ $comment->id }}" style="display: none;">
+                                <textarea class="form-control" name="edited-comment" required>{{ $comment->comment }}</textarea>
+                                <button type="button" class="btn btn-primary update-comment" data-id="{{ $comment->id }}">更新</button>
+                                <button type="button" class="btn btn-secondary cancel-edit" data-id="{{ $comment->id }}">キャンセル</button>
+                            </div>
+                        </li>
+                        @endforeach
+                    </ul>
+                    <form method="POST" action="{{ route('comments.store') }}" id="comment-form">
+                        @csrf
+                        <input type="hidden" name="post_id" value="{{ $post->id }}">
+                        <div class="form-group">
+                            <textarea class="form-control" name="comment" rows="3" placeholder="コメントを入力" required></textarea>
+                            <div id="charCount"></div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="comment-submit-btn">
+                            <span id="comment-btn-text">送信</span>
+                            <div class="spinner-border spinner-border-sm text-white d-none" role="status" id="comment-spinner">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-</body>
-</html>
+</div>
+@endsection

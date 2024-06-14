@@ -1,0 +1,28 @@
+/* ライトモードのスタイル */
+body.light-mode {
+    background-color: white;
+    color: black;
+}
+
+/* ダークモードのスタイル */
+body.dark-mode {
+    background-color: #333;
+    color: white;
+}
+
+/* ボタンのスタイル */
+.toggle-mode {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    padding: 10px;
+    background-color: #555;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.toggle-mode.light-mode {
+    background-color: #ddd;
+    color: black;
+}
