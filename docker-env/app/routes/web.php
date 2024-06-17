@@ -40,13 +40,22 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/comments', [BoardController::class, 'store2'])->name('comments.store');
     Route::patch('/comments/{id}', [BoardController::class, 'update'])->name('comments.update');
     Route::delete('/comments/{id}', [BoardController::class, 'destroy'])->name('comments.destroy');
+    Route::post('/comments/{comment}/restore', [BoardController::class, 'restore']);
     Route::get('/profile', [BoardController::class, 'showProfile'])->name('profile.show');
     Route::put('/profile/{id}', [BoardController::class, 'name_update'])->name('profile.update');
     Route::match(['get', 'post'], '/search', [BoardController::class, 'search'])->name('search');
 });
 
 // パスワードリセットのルート
-Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
-Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
-Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
-Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
+Route::prefix('reset')->group(function () {
+    // パスワード再設定用のメール送信フォーム
+    Route::get('/', 'UsersController@requestResetPassword')->name('reset.form');
+    // メール送信処理
+    Route::post('/send', 'UsersController@sendResetPasswordMail')->name('reset.send');
+    // メール送信完了
+    Route::get('/send/complete', 'UsersController@sendCompleteResetPasswordMail')->name('reset.send.complete');
+    // パスワード再設定
+    Route::get('/password/edit', 'UsersController@resetPassword')->name('reset.password.edit');
+    // パスワード更新
+    Route::post('/password/update', 'UsersController@updatePassword')->name('reset.password.update');
+});

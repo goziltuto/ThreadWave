@@ -120,6 +120,19 @@ body.dark .table tbody td {
     color: #aaaaaa !important;
 }
 
+.dark .dropdown-menu {
+    border-color: #999999;
+    background-color: #333333 !important;
+}
+
+.dark .dropdown-divider {
+    border-top: 2px solid white;
+    /* 線の色を白に設定 */
+}
+
+.dark .dropdown-item {
+    color: #ffffff !important;
+}
 
 
 /* トグルボタンの基本スタイル */
@@ -133,6 +146,8 @@ body.dark .table tbody td {
     box-sizing: content-box;
     cursor: pointer;
     transition: border-color .4s;
+    text-align: center;
+    /* 中央配置を追加 */
 }
 
 .toggle-button:has(:checked) {

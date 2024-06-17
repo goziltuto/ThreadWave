@@ -1,3 +1,9 @@
+document.getElementById('logout').addEventListener('click', function (event) {
+    event.preventDefault();
+    document.getElementById('logout-form').submit();
+});
+
+
 $(document).ready(function () {
     $('.edit-comment').click(function (e) {
         e.preventDefault();
@@ -51,7 +57,9 @@ $(document).ready(function () {
                 },
                 success: function (response) {
                     $('#display-comment-' + commentId + ' .comment-text').text('このコメントは削除されました');
+                    $('#display-comment-' + commentId + ' .edit-comment').hide();
                     $('#display-comment-' + commentId + ' .delete-comment').hide();
+                    $('#display-comment-' + commentId + ' .restore-comment').show(); // 復元ボタンを表示
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText); // エラーが発生した場合はコンソールにログを出力
@@ -63,21 +71,26 @@ $(document).ready(function () {
             e.preventDefault();
             var commentId = $(this).data('id');
 
-            // コメントの復元を行う非同期処理
-            $.ajax({
-                url: '/comments/' + commentId + '/restore',
-                type: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function (response) {
-                    // 復元が成功した場合の処理
-                    $('#display-comment-' + commentId).html(response); // 復元ボタンを削除し、削除ボタンを再表示
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
+            if (confirm('コメントを復元しますか？')) {
+                // コメントの復元を行う非同期処理
+                $.ajax({
+                    url: '/comments/' + commentId + '/restore',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (response) {
+                        $('#display-comment-' + commentId + ' .comment-text').text(response.commentText).removeClass('text-secondary');
+                        $('#display-comment-' + commentId + ' .edit-comment').show();
+                        $('#display-comment-' + commentId + ' .delete-comment').show();
+                        $('#display-comment-' + commentId + ' .restore-comment').hide(); // 復元ボタンを非表示
+                        alert("コメントが復元されました。再読み込みしてください");
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
         });
     });
 
@@ -303,3 +316,10 @@ const clock = () => {
 
 // 1秒ごとにclock関数を呼び出す
 setInterval(clock, 1000);
+
+// ハンバーガーメニュー内のクリック処理
+document.querySelectorAll('.dropdown-menu').forEach(function (element) {
+    element.addEventListener('click', function (event) {
+        event.stopPropagation();
+    });
+});

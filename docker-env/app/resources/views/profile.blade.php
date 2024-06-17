@@ -66,7 +66,7 @@
                 <label for="username" class="col-form-label col-sm-10">メールアドレス：{{ $user->email }}</label>
 
                 <div class="form-group row">
-                    <div class="col-md-6 offset-md-3">
+                    <div class="col-md-6 py-2">
                         <button type="submit" class="btn btn-primary">更新</button>
                     </div>
                 </div>

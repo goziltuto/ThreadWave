@@ -26,9 +26,9 @@
                             <label for="password">パスワード</label>
                             <input type="password" class="form-control" id="password" name="password" placeholder="パスワードを入力" />
                         </div>
-                        <div class="text-left">
+                        <div class="text-left py-3">
                             <button type="submit" class="btn btn-primary">ログイン</button>
-                            <a href="{{ route('password.request') }}" class="pl-3">※パスワード忘れた方はこちら</a>
+                            <a href="{{ route('password.request') }}" class="m-3">※パスワード忘れた方はこちら</a>
                         </div>
                     </form>
                 </div>

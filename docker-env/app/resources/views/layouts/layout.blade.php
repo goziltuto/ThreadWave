@@ -29,7 +29,7 @@
 
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm sticky-top">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <div class="image-container">
@@ -40,32 +40,49 @@
                     <p class="clock-date"></p>
                     <p class="clock-time"></p>
                 </div>
-                <div>
-                    <span>ダークモード</span><br>
-                    <label class="toggle-button">
-                        <input type="checkbox" id="darkmodeBtn" />
-                    </label>
-                </div>
+
                 <div class="my-navbar-control">
                     @if(Auth::check())
-                    <a href="{{ route('profile.show') }}" class="my-navbar-item">{{ Auth::user()->name }}</a>
-                    /
-                    <a href="#" id="logout" class="mt-navbar-item">ログアウト</a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
-                    <script>
-                        document.getElementById('logout').addEventListener('click', function(event) {
-                            event.preventDefault();
-                            document.getElementById('logout-form').submit();
-                        });
-                    </script>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <div class="my-navbar-control">
+                                    <a href="{{ route('profile.show') }}" class="dropdown-item my-navbar-item">{{ Auth::user()->name }}</a>
+                                </div>
+                            </li>
+                            <li>
+                                <a class="dropdown-header">
+                                    <label class="toggle-button">
+                                        <input type="checkbox" id="darkmodeBtn" />
+                                    </label>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    お問い合わせ
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a href="#" id="logout" class="dropdown-item mt-navbar-item">ログアウト</a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
                     @else
                     <a class="my-navbar-item" href="{{ route('login') }}">ログイン</a>
                     /
                     <a class="my-navbar-item" href="{{ route('register') }}">新規作成</a>
                     @endif
                 </div>
+
             </div>
         </nav>
         @yield('content')

@@ -107,6 +107,17 @@ class BoardController extends Controller
 
         return response()->json(['success' => true]);
     }
+    // コメント復元処理
+    public function restore($id)
+    {
+        $comment = Comment::withTrashed()->find($id);
+        if ($comment) {
+            $comment->restore();
+            return response()->json(['commentText' => $comment->text], 200);
+        } else {
+            return response()->json(['error' => 'コメントが見つかりません'], 404);
+        }
+    }
 
     // プロフィール表示メソッドを追加
     public function showProfile()
