@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BoardController;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\PasswordController;
 
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -47,15 +46,8 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 // パスワードリセットのルート
-Route::prefix('reset')->group(function () {
-    // パスワード再設定用のメール送信フォーム
-    Route::get('/', 'UsersController@requestResetPassword')->name('reset.form');
-    // メール送信処理
-    Route::post('/send', 'UsersController@sendResetPasswordMail')->name('reset.send');
-    // メール送信完了
-    Route::get('/send/complete', 'UsersController@sendCompleteResetPasswordMail')->name('reset.send.complete');
-    // パスワード再設定
-    Route::get('/password/edit', 'UsersController@resetPassword')->name('reset.password.edit');
-    // パスワード更新
-    Route::post('/password/update', 'UsersController@updatePassword')->name('reset.password.update');
-});
+Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
+Route::put('/profile/update-password/{id}', [BoardController::class, 'password_update'])->name('password.update');

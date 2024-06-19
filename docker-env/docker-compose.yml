@@ -67,3 +67,8 @@ services:
       - db
     ports:
       - 4040:80
+
+  mailhog:  # 追加
+    image: mailhog/mailhog  # MailHogのイメージを使用
+    ports:
+      - "8025:8025"  # MailHogのWeb UIにアクセスするためのポート

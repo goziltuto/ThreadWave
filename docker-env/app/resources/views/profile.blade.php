@@ -14,21 +14,55 @@
             </form>
 
             <h3 class="row justify-content-center p-4">管理者パスワード変更</h3>
-            <div class="form-group">
-                <label for="current-password">現在のパスワード</label>
-                <input type="password" id="current-password" class="form-control" placeholder="現在のパスワードを入力">
+
+            <!-- 成功メッセージの表示 -->
+            @if (session('status'))
+            <div class="alert alert-success">
+                {{ session('status') }}
             </div>
-            <div class="form-group">
-                <label for="new-password">新しいパスワード</label>
-                <input type="password" id="new-password" class="form-control" placeholder="新しいパスワードを入力">
+            @endif
+
+            <!-- エラーメッセージの表示 -->
+            @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
             </div>
-            <div class="form-group">
-                <label for="new-password-confirm">新しいパスワード（確認）</label>
-                <input type="password" class="form-control" id="password-confirm" name="password_confirmation" placeholder="新しいパスワードを入力（確認）">
+            @endif
+
+            @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
             </div>
+            @endif
+
+            <form method="POST" action="{{ route('password.update', ['id' => Auth::id()]) }}">
+                @csrf
+                @method('PUT')
+                <div class="form-group py-2">
+                    <label for="current-password">現在のパスワード</label>
+                    <input type="password" id="current-password" name="current_password" class="form-control" placeholder="現在のパスワードを入力">
+                </div>
+                <div class="form-group py-2">
+                    <label for="new-password">新しいパスワード</label>
+                    <input type="password" id="new-password" name="new_password" class="form-control" placeholder="新しいパスワードを入力">
+                </div>
+                <div class="form-group py-2">
+                    <label for="new-password-confirm">新しいパスワード（確認）</label>
+                    <input type="password" id="new-password-confirm" name="password_confirmation" class="form-control" placeholder="新しいパスワードを再入力">
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-6 py-3">
+                        <button type="submit" class="btn btn-primary">更新</button>
+                    </div>
+                </div>
+            </form>
 
             <h3 class="row justify-content-center p-4">ユーザ管理</h3>
-            <table class="table">
+            <table class="table text-center">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -42,12 +76,12 @@
                 <tbody>
                     @foreach($allUsers as $user)
                     <tr>
-                        <td>{{ $user->id }}</td>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->created_at->format('Y/m/d') }}</td>
-                        <td>{{ $user->updated_at->format('Y/m/d') }}</td>
-                        <td>{{ $user->deleted_at ? $user->deleted_at->format('Y/m/d') : '' }}</td>
-                        <td><button class="btn btn-link text-danger">削除</button></td>
+                        <td class="align-middle">{{ $user->id }}</td>
+                        <td class="align-middle">{{ $user->name }}</td>
+                        <td class="align-middle">{{ $user->created_at->format('Y/m/d') }}</td>
+                        <td class="align-middle">{{ $user->updated_at->format('Y/m/d') }}</td>
+                        <td class="align-middle">{{ $user->deleted_at ? $user->deleted_at->format('Y/m/d') : '' }}</td>
+                        <td class="align-middle"><button class="btn btn-link text-danger">削除</button></td>
                     </tr>
                     @endforeach
                 </tbody>

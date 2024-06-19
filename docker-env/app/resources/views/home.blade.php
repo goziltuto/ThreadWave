@@ -1,6 +1,13 @@
 @extends('layouts.layout')
 @section('content')
 <div class="container">
+    <!-- 管理者パスワード変更成功メッセージ -->
+    @if (session('status'))
+    <div class="alert alert-success">
+        {{ session('status') }}
+    </div>
+    @endif
+
     <div class=" justify-content-center d-flex">
         <img src="{{ asset('img/logo.jpg') }}" class="logo" alt="ThreadWave">
     </div>
@@ -98,6 +105,3 @@
     </div>
 </div>
 @endsection
-</body>
-
-</html>

@@ -9,6 +9,7 @@ use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 
 class BoardController extends Controller
@@ -148,5 +149,26 @@ class BoardController extends Controller
         $results = Post::where('title', 'like', '%' . $searchText . '%')->get();
 
         return $results;
+    }
+
+    public function password_update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        // 現在のパスワードが一致しているか確認
+        if (!Hash::check($request->input('current_password'), $user->password)) {
+            return redirect()->back()->with('error', '現在のパスワードが間違っています');
+        }
+
+        // 新しいパスワードと確認用パスワードが一致しているか確認
+        if ($request->input('new_password') !== $request->input('password_confirmation')) {
+            return redirect()->back()->with('error', '新しいパスワードと確認用パスワードが一致しません');
+        }
+
+        // パスワードを更新
+        $user->password = Hash::make($request->input('new_password'));
+        $user->save();
+
+        return redirect('/')->with('status', 'パスワードが更新されました');
     }
 }

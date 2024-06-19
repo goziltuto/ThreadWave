@@ -94,6 +94,7 @@ $(document).ready(function () {
         });
     });
 
+
     /*/ダークモード切り替え処理/*/
     const body = document.querySelector('body');
     const darkmodeBtn = document.getElementById('darkmodeBtn');
@@ -214,6 +215,46 @@ $(document).ready(function () {
 
 });
 
+// コメントがURLだった場合はリンクに変換して表示
+document.addEventListener('DOMContentLoaded', function () {
+    // すべてのコメントテキスト要素を取得
+    let commentTextElements = document.querySelectorAll('.comment-text');
+
+    // 各コメントテキスト要素に対して処理を実行
+    commentTextElements.forEach(function (element) {
+        // テキストをトリムして取得
+        let text = element.innerText.trim();
+
+        // テキストが有効なURLであれば処理を実行
+        if (isValidUrl(text)) {
+            // リンク要素を作成
+            let link = document.createElement('a');
+            link.href = text;
+            link.target = '_blank';
+            link.innerText = text;
+
+            // リンクをクリックしたときの挙動を定義
+            link.onclick = function () {
+                // ユーザーに確認を求める
+                return confirm('このリンクをクリックすると別のサイトに遷移します。よろしいですか？');
+            };
+
+            // コメントテキスト要素の内容を空にして、リンクを追加
+            element.innerHTML = '';
+            element.appendChild(link);
+        }
+    });
+
+    // URLが有効かどうかを確認する関数
+    function isValidUrl(string) {
+        try {
+            new URL(string);
+            return true;
+        } catch (_) {
+            return false;
+        }
+    }
+});
 
 /* タイピングアニメーション */
 var TxtRotate = function (el, toRotate, period) {
