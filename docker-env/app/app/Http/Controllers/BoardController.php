@@ -171,4 +171,20 @@ class BoardController extends Controller
 
         return redirect('/')->with('status', 'パスワードが更新されました');
     }
+
+    /*以下ユーザ削除と復元処理*/
+    public function user_destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->back()->with('status', 'ユーザーが削除されました');
+    }
+    public function user_restore($id)
+    {
+        $user = User::withTrashed()->findOrFail($id);
+        $user->restore();
+
+        return redirect()->back()->with('status', 'ユーザーが復元されました');
+    }
 }

@@ -43,6 +43,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/profile', [BoardController::class, 'showProfile'])->name('profile.show');
     Route::put('/profile/{id}', [BoardController::class, 'name_update'])->name('profile.update');
     Route::match(['get', 'post'], '/search', [BoardController::class, 'search'])->name('search');
+    Route::delete('/users/{id}', [BoardController::class, 'user_destroy'])->name('users.destroy');
+    Route::put('/users/{id}/restore', [BoardController::class, 'user_restore'])->name('users.restore');
 });
 
 // パスワードリセットのルート
@@ -50,4 +52,4 @@ Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestF
 Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
-Route::put('/profile/update-password/{id}', [BoardController::class, 'password_update'])->name('password.update');
+Route::put('/profile/update-password/{id}', [BoardController::class, 'password_update'])->name('profile.password.update');

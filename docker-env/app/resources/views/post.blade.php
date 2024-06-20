@@ -30,7 +30,7 @@
                                 <strong class="{{ $nameColor }}">{{ $loop->iteration }}. 名前: {{ $comment->user->name }} </strong>{{ $comment->created_at->format('Y/m/d') }}({{ $comment->created_at->isoFormat('ddd') }}) {{ $comment->created_at->format('H:i:s') }} ID: {{ $comment->user_id }}
                                 <br><span class="comment-text {{ $comment->deleted_at ? 'text-secondary' : '' }}">{{ $comment->deleted_at ? 'このコメントは削除されました' : $comment->comment }}</span>
                                 <br>
-                                @if ($comment->isOwner) <!-- 自分のコメントか確認 -->
+                                @if ($comment->isOwner || Auth::user()->id === 0) <!-- 自分のコメントかまたは管理者かを確認 -->
                                 <div class="btn-group" role="group" aria-label="Basic example">
                                     @if (is_null($comment->deleted_at))
                                     <a href="#" class="btn btn-link edit-comment" data-id="{{ $comment->id }}">編集</a>

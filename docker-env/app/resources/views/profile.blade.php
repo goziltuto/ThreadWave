@@ -39,7 +39,7 @@
             </div>
             @endif
 
-            <form method="POST" action="{{ route('password.update', ['id' => Auth::id()]) }}">
+            <form method="POST" action="{{ route('profile.password.update', ['id' => Auth::id()]) }}">
                 @csrf
                 @method('PUT')
                 <div class="form-group py-2">
@@ -81,7 +81,23 @@
                         <td class="align-middle">{{ $user->created_at->format('Y/m/d') }}</td>
                         <td class="align-middle">{{ $user->updated_at->format('Y/m/d') }}</td>
                         <td class="align-middle">{{ $user->deleted_at ? $user->deleted_at->format('Y/m/d') : '' }}</td>
-                        <td class="align-middle"><button class="btn btn-link text-danger">削除</button></td>
+                        <td class="align-middle">
+                            @if($user->id !== 0)
+                            @if($user->deleted_at)
+                            <form action="{{ route('users.restore', $user->id) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit" class="btn btn-link text-success">復元</button>
+                            </form>
+                            @else
+                            <form action="{{ route('users.destroy', $user->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-link text-danger">削除</button>
+                            </form>
+                            @endif
+                            @endif
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -95,9 +111,9 @@
                 @method('PUT')
                 <div class="form-group d-flex align-items-center">
                     <label for="username" class="col-form-label col-sm-3">ユーザ名：</label>
-                    <input type="text" id="username" class="form-control" value="{{ $user->name }}" placeholder="編集ユーザ名" required />
+                    <input type="text" id="username" name="username" class="form-control" value="{{ $user->name }}" placeholder="編集ユーザ名" required />
                 </div>
-                <label for="username" class="col-form-label col-sm-10">メールアドレス：{{ $user->email }}</label>
+                <label for="email" class="col-form-label col-sm-10">メールアドレス：{{ $user->email }}</label>
 
                 <div class="form-group row">
                     <div class="col-md-6 py-2">
