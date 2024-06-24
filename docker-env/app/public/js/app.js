@@ -28,6 +28,9 @@ $(document).ready(function () {
                 $('#display-comment-' + commentId + ' .comment-text').text(updatedComment);
                 $('#edit-comment-form-' + commentId).hide();
                 $('#display-comment-' + commentId).show();
+
+                // 更新されたコメントに対してリンク化を適用
+                isValidUrl();
             },
             error: function (xhr) {
                 console.log('Error:', xhr.responseText);
@@ -258,40 +261,6 @@ $(document).ready(function () {
 
 });
 
-// コメントがURLだった場合はリンクに変換して表示
-$(document).ready(function () {
-    // すべてのコメントテキスト要素を取得
-    $('.comment-text').each(function () {
-        // テキストをトリムして取得
-        let text = $(this).text().trim();
-
-        // テキストが有効なURLであれば処理を実行
-        if (isValidUrl(text)) {
-            // リンク要素を作成
-            let link = $('<a></a>').attr('href', text).attr('target', '_blank').text(text);
-
-            // リンクをクリックしたときの挙動を定義
-            link.on('click', function () {
-                // ユーザーに確認を求める
-                return confirm('このリンクをクリックすると別のサイトに遷移します。よろしいですか？');
-            });
-
-            // コメントテキスト要素の内容を空にして、リンクを追加
-            $(this).empty().append(link);
-        }
-    });
-
-    // URLのバリデーション関数
-    function isValidUrl(string) {
-        try {
-            new URL(string);
-            return true;
-        } catch (_) {
-            return false;
-        }
-    }
-});
-
 // コメントにURLが含まれていたらリンク化する
 // URLが有効かどうかを確認する関数
 function isValidUrl(string) {
@@ -447,13 +416,15 @@ $(document).ready(function () {
     $('#title, #category').on('input', function () {
         var title = $('#title').val().trim();
         var category = $('#category').val();
-        if (title !== '' && category !== '') {
+        if (title !== '' && category !== null) {
             $('#post-submit-btn').prop('disabled', false);
         } else {
             $('#post-submit-btn').prop('disabled', true);
         }
     });
 
+
+    // 以下カテゴリ並び替え処理
     $('#category-submit-btn').prop('disabled', true);
 
     // カテゴリが選択されたときの処理

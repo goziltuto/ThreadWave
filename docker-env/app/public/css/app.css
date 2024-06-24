@@ -138,6 +138,11 @@ body.dark .table tbody td {
     cursor: pointer;
 }
 
+.comment-text {
+    /* CSSで改行を保持する */
+    white-space: pre-wrap;
+}
+
 /* トグルボタンの基本スタイル */
 .toggle-button {
     display: inline-block;
