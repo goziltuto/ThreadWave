@@ -25,6 +25,7 @@
                                 @error('email')
                                 <p class="invalid-feedback" role="alert" style="white-space: none;">
                                     <strong style="display: block;">{{ $message }}</strong>
+                                    <a class="my-navbar-item" href="{{ route('register') }}">アカウントを新規作成する</a>
                                 </p>
                                 @enderror
                             </div>

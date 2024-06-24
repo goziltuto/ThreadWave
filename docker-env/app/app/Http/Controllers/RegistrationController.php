@@ -6,13 +6,14 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Comment;
+use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 
-class BoardController extends Controller
+class RegistrationController extends Controller
 {
 
     public function __construct()
@@ -27,21 +28,25 @@ class BoardController extends Controller
 
         $mostCommentedPosts = Post::withCount('comments')->orderBy('comments_count', 'desc')->get();
 
-        return view('home', ['posts' => $posts, 'mostCommentedPosts' => $mostCommentedPosts]);
+        $categories = Category::with('posts')->get();
+
+        return view('home', ['posts' => $posts, 'mostCommentedPosts' => $mostCommentedPosts, 'categories' => $categories]);
     }
 
-    /*/以下投稿処理/*/
-    public function store(Request $request)
+    /*/以下スレッド投稿処理/*/
+    public function create_post(Request $request)
     {
         // フォームから送信されたデータをバリデート
         $request->validate([
             'title' => 'required|string|max:255',
+            'category_id' => 'nullable|exists:categories,id',
         ]);
 
         // 新しい投稿を作成しデータベースに保存
         Post::create([
             'user_id' => Auth::id(), // 現在ログインしているユーザーIDを使用
             'title' => $request->title,
+            'category_id' => $request->category_id ?? null, // カテゴリーが選択されていない場合はnullをセット
         ]);
 
         // 投稿後、ホームページにリダイレクト
@@ -63,7 +68,7 @@ class BoardController extends Controller
         return view('post', ['post' => $post, 'comments' => $comments]);
     }
 
-    public function store2(Request $request)
+    public function create_comment(Request $request)
     {
         $request->validate([
             'post_id' => 'required|exists:posts,id',

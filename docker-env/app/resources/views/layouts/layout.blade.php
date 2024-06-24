@@ -36,6 +36,7 @@
                         <img src="{{ asset('img/logo.jpg') }}" class="header-logo" alt="ThreadWave">
                     </div>
                 </a>
+
                 <div class="clock">
                     <p class="clock-date"></p>
                     <p class="clock-time"></p>
@@ -54,11 +55,12 @@
                                 </div>
                             </li>
                             <li>
-                                <a class="dropdown-header">
+                                <div class="dropdown-header">
+                                    <span class="dark-mode-text">ダークモード</span>
                                     <label class="toggle-button">
-                                        <input type="checkbox" id="darkmodeBtn" />
+                                        <input type="checkbox" id="darkmodeBtn">
                                     </label>
-                                </a>
+                                </div>
                             </li>
                             <li>
                                 <a class="dropdown-item" href="#">

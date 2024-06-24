@@ -56,7 +56,7 @@ $(document).ready(function () {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (response) {
-                    $('#display-comment-' + commentId + ' .comment-text').text('このコメントは削除されました');
+                    $('#display-comment-' + commentId + ' .comment-text').text('このコメントは削除されました').addClass('text-secondary');
                     $('#display-comment-' + commentId + ' .edit-comment').hide();
                     $('#display-comment-' + commentId + ' .delete-comment').hide();
                     $('#display-comment-' + commentId + ' .restore-comment').show(); // 復元ボタンを表示
@@ -80,11 +80,12 @@ $(document).ready(function () {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function (response) {
-                        $('#display-comment-' + commentId + ' .comment-text').text(response.commentText).removeClass('text-secondary');
+                        $('#display-comment-' + commentId + ' .comment-text').text('このコメントは復元されました').addClass('text-warning');
                         $('#display-comment-' + commentId + ' .edit-comment').show();
                         $('#display-comment-' + commentId + ' .delete-comment').show();
                         $('#display-comment-' + commentId + ' .restore-comment').hide(); // 復元ボタンを非表示
-                        alert("コメントが復元されました。再読み込みしてください");
+                        alert("コメントが復元されました。ページを再読み込みします");
+                        location.reload(); // ページをリロード
                     },
                     error: function (xhr, status, error) {
                         console.error(xhr.responseText);
@@ -108,13 +109,16 @@ $(document).ready(function () {
 
     darkmodeBtn.addEventListener('click', () => {
         body.classList.toggle('dark');
+        var dropdownMenu = document.querySelector('.dropdown-menu');
         if (mode === 'normal') {
             body.classList.add('dark');
+            dropdownMenu.classList.add('dropdown-menu-dark'); // ハンバーガーメニューを黒にする
             localStorage.setItem('mode', 'dark');
             mode = 'dark';
             console.log('ダークモード');
         } else {
             body.classList.remove('dark');
+            dropdownMenu.classList.remove('dropdown-menu-dark');// ハンバーガーメニューを白にする
             localStorage.setItem('mode', 'normal');
             mode = 'normal';
             console.log('ホワイトモード');
@@ -171,7 +175,7 @@ $(document).ready(function () {
             // 検索結果をリストアイテムとして追加
             $.each(results, function (index, post) {
                 var listItem = $('<li class="list-group-item text-left align-items-start p-1"></li>');
-                var postLink = $('<a href="/post/' + post.id + '" class="btn btn-link">' + post.title + '</a>');
+                var postLink = $('<a href="/post/' + post.id + '" class="btn btn-link"><strong>' + post.title + '</strong></a>');
                 listItem.append(postLink);
                 resultList.append(listItem);
             });
@@ -180,6 +184,45 @@ $(document).ready(function () {
             searchResultsDiv.append('<p>該当する投稿が見つかりませんでした。</p>'); // 該当する投稿がない場合のメッセージを表示
         }
     }
+
+    $(document).ready(function () {
+        $('#category-submit-btn').click(function (e) {
+            e.preventDefault();
+            var categoryId = $('#selected-category').val();
+
+            // ボタンを無効化し、グレーアウトさせる
+            $('#search-btn').prop('disabled', true);
+
+            // ローディングアニメーションを表示
+            $('#category-btn-text').addClass('d-none');
+            $('#category-spinner').removeClass('d-none');
+
+            $.ajax({
+                url: '/posts/category/' + categoryId,
+                type: 'GET',
+                success: function (data) {
+                    var postsHtml = '';
+                    data.forEach(function (post) {
+                        postsHtml += '<li class="list-group-item text-left align-items-start p-1">' +
+                            '<a href="/post/' + post.id + '" class="btn btn-link"><strong>' + post.title + '</strong></a>' +
+                            '</li>';
+                    });
+                    $('#category-posts').html('<ul class="list-group">' + postsHtml + '</ul>');
+
+                    // ローディングアニメーションを非表示
+                    $('#category-btn-text').removeClass('d-none');
+                    $('#category-spinner').addClass('d-none');
+                },
+                error: function (error) {
+                    console.log(error);
+
+                    // エラーハンドリング後、ローディングアニメーションを非表示
+                    $('#category-btn-text').removeClass('d-none');
+                    $('#category-spinner').addClass('d-none');
+                }
+            });
+        });
+    });
 
     /* 以下コメント処理 */
     // 投稿フォームのsubmitイベントを監視
@@ -216,36 +259,29 @@ $(document).ready(function () {
 });
 
 // コメントがURLだった場合はリンクに変換して表示
-document.addEventListener('DOMContentLoaded', function () {
+$(document).ready(function () {
     // すべてのコメントテキスト要素を取得
-    let commentTextElements = document.querySelectorAll('.comment-text');
-
-    // 各コメントテキスト要素に対して処理を実行
-    commentTextElements.forEach(function (element) {
+    $('.comment-text').each(function () {
         // テキストをトリムして取得
-        let text = element.innerText.trim();
+        let text = $(this).text().trim();
 
         // テキストが有効なURLであれば処理を実行
         if (isValidUrl(text)) {
             // リンク要素を作成
-            let link = document.createElement('a');
-            link.href = text;
-            link.target = '_blank';
-            link.innerText = text;
+            let link = $('<a></a>').attr('href', text).attr('target', '_blank').text(text);
 
             // リンクをクリックしたときの挙動を定義
-            link.onclick = function () {
+            link.on('click', function () {
                 // ユーザーに確認を求める
                 return confirm('このリンクをクリックすると別のサイトに遷移します。よろしいですか？');
-            };
+            });
 
             // コメントテキスト要素の内容を空にして、リンクを追加
-            element.innerHTML = '';
-            element.appendChild(link);
+            $(this).empty().append(link);
         }
     });
 
-    // URLが有効かどうかを確認する関数
+    // URLのバリデーション関数
     function isValidUrl(string) {
         try {
             new URL(string);
@@ -255,6 +291,44 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 });
+
+// コメントにURLが含まれていたらリンク化する
+// URLが有効かどうかを確認する関数
+function isValidUrl(string) {
+    try {
+        new URL(string);
+        return true;
+    } catch (_) {
+        return false;
+    }
+}
+
+// コメントを含む要素を取得
+const comments = document.querySelectorAll('.comment-text');
+
+comments.forEach(comment => {
+    // コメントテキストを取得
+    let content = comment.innerHTML;
+    // 改行ごとに分割
+    let parts = content.split(/\n/);
+
+    // 新しいコンテンツを保持するための配列
+    let newContent = parts.map(part => {
+        let trimmedPart = part.trim();
+        if (isValidUrl(trimmedPart)) {
+            // URL部分をリンク化
+            return `<a href="${trimmedPart}" target="_blank">${trimmedPart}</a>`;
+        } else {
+            // URLでない部分はそのまま
+            return part;
+        }
+    }).join('\n');
+
+    // 新しいコンテンツを設定
+    comment.innerHTML = newContent;
+});
+
+
 
 /* タイピングアニメーション */
 var TxtRotate = function (el, toRotate, period) {
@@ -362,5 +436,33 @@ setInterval(clock, 1000);
 document.querySelectorAll('.dropdown-menu').forEach(function (element) {
     element.addEventListener('click', function (event) {
         event.stopPropagation();
+    });
+});
+
+// スレッド投稿時と表示のバリデーション
+$(document).ready(function () {
+    $('#post-submit-btn').prop('disabled', true);
+
+    // タイトルまたはカテゴリが変更されたとき、投稿ボタンを有効にする
+    $('#title, #category').on('input', function () {
+        var title = $('#title').val().trim();
+        var category = $('#category').val();
+        if (title !== '' && category !== '') {
+            $('#post-submit-btn').prop('disabled', false);
+        } else {
+            $('#post-submit-btn').prop('disabled', true);
+        }
+    });
+
+    $('#category-submit-btn').prop('disabled', true);
+
+    // カテゴリが選択されたときの処理
+    $('#selected-category').change(function () {
+        var selectedCategory = $(this).val();
+        if (selectedCategory !== '') {
+            $('#category-submit-btn').prop('disabled', false);
+        } else {
+            $('#category-submit-btn').prop('disabled', true);
+        }
     });
 });

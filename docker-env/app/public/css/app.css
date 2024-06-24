@@ -134,6 +134,9 @@ body.dark .table tbody td {
     color: #ffffff !important;
 }
 
+#category {
+    cursor: pointer;
+}
 
 /* トグルボタンの基本スタイル */
 .toggle-button {
@@ -146,7 +149,6 @@ body.dark .table tbody td {
     box-sizing: content-box;
     cursor: pointer;
     transition: border-color .4s;
-    text-align: center;
     /* 中央配置を追加 */
 }
 
@@ -176,8 +178,22 @@ body.dark .table tbody td {
     display: none;
 }
 
-span {
-    white-space: pre-wrap;
+.dropdown-header {
+    display: flex;
+    align-items: center;
+}
+
+/* dark modeテキストのスタイル */
+.dark-mode-text {
+    margin-right: 5px;
+}
+
+.dropdown-header {
+    color: black;
+}
+
+.dark .dropdown-header {
+    color: white;
 }
 
 

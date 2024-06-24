@@ -20,9 +20,17 @@ body.dark-mode {
     color: white;
     border: none;
     cursor: pointer;
+    display: flex;
+    align-items: center;
 }
 
 .toggle-mode.light-mode {
     background-color: #ddd;
     color: black;
+}
+
+/* dark modeテキストのスタイル */
+.dark-mode-text {
+    margin-left: 5px;
+    /* テキストとボタンの間隔を設定 */
 }
