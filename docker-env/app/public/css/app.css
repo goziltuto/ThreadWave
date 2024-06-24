@@ -116,8 +116,12 @@ body.dark .table tbody td {
 }
 
 .dark .active {
-    background-color: #222222 !important;
     color: #aaaaaa !important;
+}
+
+/* ダークモード時の選択しているタブの色 */
+.dark .nav-tabs .nav-link.active {
+    background-color: #222222 !important;
 }
 
 .dark .dropdown-menu {

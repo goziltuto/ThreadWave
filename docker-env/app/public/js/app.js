@@ -188,6 +188,7 @@ $(document).ready(function () {
         }
     }
 
+    // カテゴリ並び替え処理
     $(document).ready(function () {
         $('#category-submit-btn').click(function (e) {
             e.preventDefault();
@@ -204,13 +205,17 @@ $(document).ready(function () {
                 url: '/posts/category/' + categoryId,
                 type: 'GET',
                 success: function (data) {
-                    var postsHtml = '';
-                    data.forEach(function (post) {
-                        postsHtml += '<li class="list-group-item text-left align-items-start p-1">' +
-                            '<a href="/post/' + post.id + '" class="btn btn-link"><strong>' + post.title + '</strong></a>' +
-                            '</li>';
-                    });
-                    $('#category-posts').html('<ul class="list-group">' + postsHtml + '</ul>');
+                    if (data.length > 0) {
+                        var postsHtml = '';
+                        data.forEach(function (post) {
+                            postsHtml += '<li class="list-group-item text-left align-items-start p-1">' +
+                                '<a href="/post/' + post.id + '" class="btn btn-link"><strong>' + post.title + '</strong></a>' +
+                                '</li>';
+                        });
+                        $('#category-posts').html('<ul class="list-group">' + postsHtml + '</ul>');
+                    } else {
+                        $('#category-posts').html('<p>該当する投稿が見つかりませんでした。</p>');
+                    }
 
                     // ローディングアニメーションを非表示
                     $('#category-btn-text').removeClass('d-none');
