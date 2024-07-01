@@ -66,10 +66,10 @@
                 <div class="card-body">
                     <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">最新</a>
+                            <a class="nav-link active" id="latest-tab" data-bs-toggle="tab" href="#latest" role="tab" aria-controls="latest" aria-selected="true">最新</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">人気</a>
+                            <a class="nav-link" id="popularity-tab" data-bs-toggle="tab" href="#popularity" role="tab" aria-controls="popularity" aria-selected="false">人気</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="categories-tab" data-bs-toggle="tab" href="#categories" role="tab" aria-controls="categories" aria-selected="false">カテゴリ</a>
@@ -77,12 +77,11 @@
                         <li class="nav-item">
                             <a class="nav-link" id="search-tab" data-bs-toggle="tab" href="#search" role="tab" aria-controls="search" aria-selected="false">検索</a>
                         </li>
-
                     </ul>
                 </div>
                 <div class="card-body">
                     <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="tab-pane fade show active" id="latest" role="tabpanel" aria-labelledby="latest-tab">
                             <ul class="list-group">
                                 @foreach($posts as $post)
                                 <li class="list-group-item text-left align-items-start p-1">
@@ -91,7 +90,7 @@
                                 @endforeach
                             </ul>
                         </div>
-                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="tab-pane fade" id="popularity" role="tabpanel" aria-labelledby="popularity-tab">
                             <ul class="list-group">
                                 @foreach($mostCommentedPosts as $post)
                                 <li class="list-group-item text-left align-items-start p-1">

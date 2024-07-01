@@ -33,7 +33,9 @@
                                 @if ($comment->isOwner || Auth::user()->id === 0) <!-- 自分のコメントかまたは管理者かを確認 -->
                                 <div class="btn-group" role="group" aria-label="Basic example">
                                     @if (is_null($comment->deleted_at))
+                                    @if ($comment->isOwner) <!-- 編集ボタンは自分の投稿のみ表示 -->
                                     <a href="#" class="btn btn-link edit-comment" data-id="{{ $comment->id }}">編集</a>
+                                    @endif
                                     <a href="#" class="btn btn-link delete-comment text-danger" data-id="{{ $comment->id }}">削除</a>
                                     @endif
                                     <a href="#" class="btn btn-link restore-comment text-success" data-id="{{ $comment->id }}" style="display: none;">復元</a>
