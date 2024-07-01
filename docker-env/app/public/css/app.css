@@ -205,10 +205,6 @@ body.dark .table tbody td {
     color: white;
 }
 
-
-/* Google Fonts 読み込み */
-@import url("https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap");
-
 /* 時計の共通スタイル */
 .clock {
     font-family: 'Share Tech Mono', monospace;

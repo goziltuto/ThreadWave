@@ -123,6 +123,17 @@
             </form>
             <a href="{{ route('password.request') }}" class="col-form-label col-sm-10">パスワード変更</a>
             @endif
+
+            <h3 class="row justify-content-center p-4">あなたの投稿一覧</h3>
+            <div class="card-body">
+                <ul class="list-group">
+                    @foreach($myposts as $post)
+                    <li class="list-group-item text-left align-items-start p-1">
+                        <a href="{{ route('post.show', $post->id) }}" class="btn btn-link"><strong>{{ $post->title }}</strong></a>
+                    </li>
+                    @endforeach
+                </ul>
+            </div>
         </div>
     </div>
 </div>

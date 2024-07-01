@@ -427,7 +427,7 @@ $(document).ready(function () {
     });
 
 
-    // 以下カテゴリ並び替えのボタン処理
+    // 以下カテゴリ並び替えのボタンバリデーション処理
     $('#category-submit-btn').prop('disabled', true);
 
     // カテゴリが選択されたときの処理
@@ -440,16 +440,33 @@ $(document).ready(function () {
         }
     });
 
-    // 以下検索並び替えのボタン処理
-    $('#search-submit-btn').prop('disabled', true);
+    // 以下検索並び替えのボタンバリデーション処理
+    $('#search-btn').prop('disabled', true);
 
     // 文字が入力されたときの処理
     $('#search-text').on('input', function () {
         var SearchKeyword = $('#search-text').val().trim();
         if (SearchKeyword !== '') {
-            $('#search-submit-btn').prop('disabled', false);
+            // ボタンを有効化し、元の色に戻す
+            $('#search-btn').prop('disabled', false);
         } else {
-            $('#search-submit-btn').prop('disabled', true);
+            // ボタンを無効化
+            $('#search-btn').prop('disabled', true);
+        }
+    });
+
+    // 以下コメントバリデーション
+
+    $('#comment-submit-btn').prop('disabled', true);
+    // コメント文字が入力されたときの処理
+    $('#comment-text').on('input', function () {
+        var CommentKeyword = $('#comment-text').val().trim();
+        if (CommentKeyword !== '') {
+            // ボタンを有効化し、元の色に戻す
+            $('#comment-submit-btn').prop('disabled', false);
+        } else {
+            // ボタンを無効化
+            $('#comment-submit-btn').prop('disabled', true);
         }
     });
 });

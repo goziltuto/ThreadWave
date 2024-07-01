@@ -52,7 +52,7 @@
                         @csrf
                         <input type="hidden" name="post_id" value="{{ $post->id }}">
                         <div class="form-group">
-                            <textarea class="form-control" name="comment" rows="3" placeholder="コメントを入力" required></textarea>
+                            <textarea class="form-control" id="comment-text" name="comment" rows="3" placeholder="コメントを入力" required></textarea>
                             <div id="charCount"></div>
                         </div>
                         <button type="submit" class="btn btn-primary" id="comment-submit-btn">
@@ -61,6 +61,15 @@
                                 <span class="visually-hidden">Loading...</span>
                             </div>
                         </button>
+                        @if ($errors->any())
+                        <div class="alert alert-danger mt-2">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        @endif
                     </form>
                 </div>
             </div>

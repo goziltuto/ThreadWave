@@ -30,6 +30,9 @@ class RegistrationController extends Controller
 
         $categories = Category::with('posts')->get();
 
+        $userId = Auth::id();
+        $myposts = Post::where('user_id', $userId)->get();
+
         return view('home', ['posts' => $posts, 'mostCommentedPosts' => $mostCommentedPosts, 'categories' => $categories]);
     }
 
@@ -38,8 +41,8 @@ class RegistrationController extends Controller
     {
         // フォームから送信されたデータをバリデート
         $request->validate([
-            'title' => 'required|string|max:255',
-            'category_id' => 'nullable|exists:categories,id',
+            'title' => 'required|string|max:30',
+            'category_id' => 'required|exists:categories,id',
         ]);
 
         // 新しい投稿を作成しデータベースに保存
@@ -131,7 +134,10 @@ class RegistrationController extends Controller
         $user = Auth::user();
         $allUsers = User::withTrashed()->get(); // 全ユーザを取得（論理削除されたユーザも含む）
 
-        return view('profile', compact('user', 'allUsers'));
+        $userId = Auth::id();
+        $myposts = Post::where('user_id', $userId)->get();
+
+        return view('profile', compact('user', 'allUsers', 'myposts'));
     }
     // プロフィールからパスワード変更
     public function name_update(Request $request, $id)
